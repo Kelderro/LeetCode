@@ -1,0 +1,29 @@
+---
+name: Lint
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.cs"
+      - ".editorconfig"
+
+env:
+  DOTNET_VERSION: "7.0.100"
+
+jobs:
+  build:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run dotnet format
+        run: dotnet format --verify-no-changes --verbosity minimal
